@@ -12,6 +12,8 @@
 | [supabase/migrations/](./supabase/migrations/) | `gold_quotes` 테이블 DDL |
 | [scripts/sync_to_supabase.py](./scripts/sync_to_supabase.py) | API → Supabase upsert |
 | [web/main.py](./web/main.py) | Supabase `gold_quotes` 조회 API + 정적 페이지 |
+| [api/index.py](./api/index.py) | Vercel Python 엔트리포인트 |
+| [vercel.json](./vercel.json) | Vercel 라우팅/함수 설정 |
 
 ## Supabase에 데이터 적재
 
@@ -32,6 +34,19 @@ uvicorn web.main:app --host 127.0.0.1 --port 8765
 ```
 
 이제 웹 화면의 그래프·표는 외부 금시세 사이트가 아니라 **Supabase `gold_quotes` 테이블**을 기준으로 표시됩니다.
+
+## Vercel 배포
+
+이 프로젝트는 **Next.js가 아니라 FastAPI(Python)** 기반입니다.  
+Vercel에 연결할 때는 다음처럼 설정하세요.
+
+1. **Framework Preset**: `Other`
+2. **Root Directory**: 저장소 루트
+3. **Environment Variables**:
+   - `SUPABASE_URL`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+
+`vercel.json`이 모든 요청을 `api/index.py`로 보내고, 이 엔트리포인트가 `web.main`의 FastAPI 앱을 실행합니다.
 
 ## 데이터 소스
 
